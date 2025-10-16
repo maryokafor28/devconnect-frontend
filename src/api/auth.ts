@@ -1,14 +1,26 @@
 import { apiFetch } from "@/lib/api";
 import { AuthResponse, LoginData, RegisterData, User } from "@/types";
 
+// Add response type for /auth/me
+interface MeResponse {
+  success: boolean;
+  user: User;
+}
+
 export const AuthAPI = {
   register: (data: RegisterData) =>
-    apiFetch<AuthResponse>("/auth/register", { method: "POST", body: data }),
+    apiFetch<AuthResponse>("/api/auth/register", {
+      method: "POST",
+      body: data,
+    }),
 
   login: (data: LoginData) =>
-    apiFetch<AuthResponse>("/auth/login", { method: "POST", body: data }),
+    apiFetch<AuthResponse>("/api/auth/login", { method: "POST", body: data }),
 
-  logout: () => apiFetch<void>("/auth/logout", { method: "POST" }),
+  logout: () => apiFetch<void>("/api/auth/logout", { method: "POST" }),
 
-  getCurrentUser: () => apiFetch<User>("/auth/me"),
+  getCurrentUser: async (): Promise<User> => {
+    const response = await apiFetch<MeResponse>("/api/auth/me");
+    return response.user; // ✅ Extract the user from the response
+  },
 };

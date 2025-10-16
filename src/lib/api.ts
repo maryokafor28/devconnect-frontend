@@ -1,55 +1,39 @@
+// lib/api.ts
 import { RequestOptions } from "@/types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-/**
- * Generic API fetcher with automatic refresh retry logic.
- */
+if (!BASE_URL) {
+  throw new Error("❌ NEXT_PUBLIC_API_BASE_URL is not defined in .env.local");
+}
+
 export async function apiFetch<T>(
   endpoint: string,
-  options: RequestOptions = {},
-  retry = true
+  options: RequestOptions = {}
 ): Promise<T> {
-  const { method = "GET", headers = {}, body } = options;
+  const url = `${BASE_URL}${endpoint}`;
+  console.log("🔍 Full URL being called:", url); // Add this line
 
-  const finalHeaders: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...headers,
-  };
+  console.log("🔍 Fetching:", url);
 
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    method,
-    headers: finalHeaders,
-    body: body ? JSON.stringify(body) : undefined,
+  const res = await fetch(url, {
+    method: options.method || "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+    body: options.body ? JSON.stringify(options.body) : undefined,
     credentials: "include",
   });
 
-  // 🔁 Handle expired access token (401)
-  if (res.status === 401 && retry) {
-    const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
+  // Parse response
+  const data = await res.json().catch(() => ({}));
 
-    if (refreshRes.ok) {
-      // Retry original request once
-      return apiFetch<T>(endpoint, options, false);
-    }
-
-    // Refresh failed — throw session error
-    throw new Error("Session expired. Please log in again.");
-  }
-
-  // ❌ Handle non-OK responses
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || `API Error: ${res.status}`);
+    // ✅ Extract message from your backend error format
+    const errorMessage = data.message || `API Error: ${res.status}`;
+    throw new Error(errorMessage);
   }
 
-  // ✅ Handle empty responses
-  if (res.status === 204 || res.headers.get("content-length") === "0") {
-    return {} as T;
-  }
-
-  return (await res.json()) as T;
+  return data as T;
 }

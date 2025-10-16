@@ -7,9 +7,7 @@ export interface User {
   _id: string;
   username: string;
   email: string;
-  avatar?: string;
-  bio?: string;
-  createdAt?: string;
+  name: string;
 }
 
 export interface AuthResponse {
@@ -35,10 +33,11 @@ export interface Project {
   _id: string;
   title: string;
   description: string;
-  techstack: string;
-  image?: string;
-  author: User;
+  techStack: string[];
+  createdBy: User;
   comments: Comment[];
+  repoUrl?: string;
+  liveUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,8 +45,9 @@ export interface Project {
 export interface CreateProjectData {
   title: string;
   description: string;
-  image?: string;
-  techstack: string;
+  techStack: string[];
+  repoUrl?: string;
+  liveUrl?: string;
 }
 
 // =========================
@@ -56,6 +56,7 @@ export interface CreateProjectData {
 export interface Comment {
   _id: string;
   text: string;
+  user: User;
   author: User;
   createdAt: string;
 }
