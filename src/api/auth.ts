@@ -23,4 +23,10 @@ export const AuthAPI = {
     const response = await apiFetch<MeResponse>("/api/auth/me");
     return response.user; // ✅ Extract the user from the response
   },
+  // 🌀 New: Refresh access token
+  async refreshToken() {
+    return apiFetch<{ accessToken: string }>("/api/auth/refresh", {
+      method: "POST",
+    });
+  },
 };

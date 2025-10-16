@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Code } from "lucide-react";
+import { ExternalLink, Code, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Project } from "@/types";
@@ -54,7 +54,14 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           )}
         </div>
 
-        <p className="text-sm text-gray-400">By {project.createdBy.name}</p>
+        {/* Author and Comment Count */}
+        <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
+          <p>By {project.createdBy.name}</p>
+          <div className="flex items-center gap-1.5">
+            <MessageCircle className="w-4 h-4" />
+            <span>{project.commentCount || 0}</span>
+          </div>
+        </div>
       </CardContent>
       {/* 👇 View Details Button */}
       <CardContent className="pt-0">

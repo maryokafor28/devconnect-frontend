@@ -40,6 +40,7 @@ export interface Project {
   liveUrl?: string;
   createdAt: string;
   updatedAt: string;
+  commentCount?: number;
 }
 
 export interface CreateProjectData {
@@ -56,14 +57,46 @@ export interface CreateProjectData {
 export interface Comment {
   _id: string;
   text: string;
-  user: User;
-  author: User;
+  user?: {
+    _id: string;
+    name: string;
+    email?: string;
+  };
+  userId?: {
+    _id: string;
+    name: string;
+    email?: string;
+  };
   createdAt: string;
+  projectId?: string;
 }
-
 export interface CreateCommentData {
   text: string;
   projectId: string;
+}
+export interface AddCommentResponse {
+  message: string;
+  comment: Comment;
+}
+
+// =========================
+// COMPONENT PROP TYPES
+// =========================
+export interface CommentItemProps {
+  comment: Comment; // ✅ Use the Comment type directly
+  onUpdate: (updatedComment: Comment) => void;
+  onDelete: (commentId: string) => void;
+}
+export interface CommentSectionProps {
+  projectId: string;
+}
+
+export interface ProjectActionsProps {
+  projectId: string;
+}
+
+export interface ProjectCardProps {
+  project: Project;
 }
 
 // =========================

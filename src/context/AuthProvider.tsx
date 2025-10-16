@@ -25,14 +25,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // 🧠 Load current user when app mounts
+  // 🧠 Load or refresh user on mount
   useEffect(() => {
     (async () => {
       try {
+        // Try to get current user
         const me = await AuthAPI.getCurrentUser();
         setUser(me);
       } catch {
-        setUser(null);
+        try {
+          // 🌀 Try refreshing access token if it's expired
+          await AuthAPI.refreshToken();
+
+          // ✅ After refresh, try to get user again
+          const me = await AuthAPI.getCurrentUser();
+          setUser(me);
+        } catch {
+          // ❌ Refresh also failed — user must log in again
+          setUser(null);
+        }
       } finally {
         setLoading(false);
       }

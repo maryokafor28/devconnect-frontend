@@ -5,19 +5,25 @@ import { useParams } from "next/navigation";
 import { ProjectAPI } from "@/api/projects";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthProvider";
+import CommentSection from "@/components/projects/CommentSection";
+import ProjectActions from "@/components/projects/ProjectAction";
 import { Project } from "@/types";
 
 export default function ProjectDetailsPage() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     async function fetchProject() {
       try {
-        const project = await ProjectAPI.getById(id as string); // ✅ Returns Project directly
-        setProject(project);
+        const res = await ProjectAPI.getById(id as string);
+        setProject(res);
+        setIsOwner(user?._id === res.createdBy?._id);
       } catch {
         setError("Failed to load project");
       } finally {
@@ -25,12 +31,13 @@ export default function ProjectDetailsPage() {
       }
     }
     if (id) fetchProject();
-  }, [id]);
+  }, [id, user]);
+
   if (loading)
-    return <p className="text-center mt-10 text-gray-500">Loading...</p>;
-  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+    return <p className="text-center mt-10 text-gray-400">Loading...</p>;
+  if (error) return <p className="text-center mt-10 text-red-400">{error}</p>;
   if (!project)
-    return <p className="text-center mt-10 text-gray-500">Project not found</p>;
+    return <p className="text-center mt-10 text-gray-400">Project not found</p>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 text-white py-10 px-4">
@@ -38,6 +45,7 @@ export default function ProjectDetailsPage() {
         <h1 className="text-3xl font-bold mb-2">{project.title}</h1>
         <p className="text-gray-200 mb-6">{project.description}</p>
 
+        {/* Tech Stack */}
         <div className="flex flex-wrap gap-2 mb-4">
           {project.techStack?.map((tech, i) => (
             <Badge key={i} className="bg-blue-800 text-white border-none">
@@ -46,6 +54,7 @@ export default function ProjectDetailsPage() {
           ))}
         </div>
 
+        {/* Author */}
         <div className="mb-6">
           <p className="font-semibold">Author:</p>
           <a
@@ -56,7 +65,8 @@ export default function ProjectDetailsPage() {
           </a>
         </div>
 
-        <div className="flex gap-4">
+        {/* Links */}
+        <div className="flex gap-4 mb-6">
           {project.repoUrl && (
             <Button asChild className="bg-blue-800 hover:bg-blue-900">
               <a
@@ -80,6 +90,14 @@ export default function ProjectDetailsPage() {
             </Button>
           )}
         </div>
+
+        {/* Owner actions */}
+        {isOwner && <ProjectActions projectId={id as string} />}
+
+        {/* Comments */}
+        {id && typeof id === "string" && (
+          <CommentSection projectId={id as string} />
+        )}
       </div>
     </div>
   );
