@@ -12,7 +12,7 @@ export default function CreateProjectButton() {
   return (
     <div className="flex justify-end mb-6">
       <Button
-        onClick={() => router.push("/projects/new")}
+        onClick={() => router.push("/projects/newproject")}
         className="bg-purple-600 hover:bg-purple-700 text-white"
       >
         + Create New Project

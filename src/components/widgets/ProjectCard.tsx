@@ -2,6 +2,9 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ExternalLink, Code } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Project } from "@/types";
 
 interface ProjectCardProps {
@@ -25,7 +28,41 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             </Badge>
           ))}
         </div>
+        {/* Links Section */}
+        <div className="flex gap-3 mb-3">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span>Live Demo</span>
+            </a>
+          )}
+          {project.repoUrl && (
+            <a
+              href={project.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors"
+            >
+              <Code className="w-4 h-4" />
+              <span>Repository</span>
+            </a>
+          )}
+        </div>
+
         <p className="text-sm text-gray-400">By {project.createdBy.name}</p>
+      </CardContent>
+      {/* 👇 View Details Button */}
+      <CardContent className="pt-0">
+        <Link href={`/projects/${project._id}`}>
+          <Button className="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium">
+            View Details
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );
