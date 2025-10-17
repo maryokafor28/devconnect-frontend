@@ -55,7 +55,7 @@ export default function SignupPage() {
           <Input
             type="text"
             name="name"
-            placeholder="Full name"
+            placeholder="name"
             value={formData.name}
             onChange={handleChange}
             className="bg-white/20 border-white/30 text-white placeholder:text-gray-200"

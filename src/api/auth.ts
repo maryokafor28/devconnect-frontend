@@ -21,12 +21,26 @@ export const AuthAPI = {
 
   getCurrentUser: async (): Promise<User> => {
     const response = await apiFetch<MeResponse>("/api/auth/me");
-    return response.user; // ✅ Extract the user from the response
+    return response.user;
   },
-  // 🌀 New: Refresh access token
+
+  // ✅ Use native fetch instead of apiFetch to avoid circular dependency
   async refreshToken() {
-    return apiFetch<{ accessToken: string }>("/api/auth/refresh", {
+    const response = await fetch("/api/auth/refresh", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Important for sending cookies
     });
+
+    if (!response.ok) {
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Failed to refresh token" }));
+      throw new Error(error.message || "Failed to refresh token");
+    }
+
+    return response.json() as Promise<{ accessToken: string }>;
   },
 };
