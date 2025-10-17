@@ -11,10 +11,10 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!loading) {
       if (user?._id) {
-        // ✅ Redirect logged-in user to their profile page
+        //  Redirect logged-in user to their profile page
         router.replace(`/profile/${user._id}`);
       } else {
-        // ❌ Not logged in — redirect to login or show message
+        // Not logged in — redirect to login or show message
         router.replace("/login");
       }
     }

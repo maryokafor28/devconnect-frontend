@@ -13,7 +13,7 @@ export default function CommentItem({
 }: CommentItemProps) {
   const { user } = useAuth();
 
-  // ✅ Handle both populated and non-populated userId
+  //  Handle both populated and non-populated userId
   const commentUser =
     typeof comment.userId === "object"
       ? comment.userId

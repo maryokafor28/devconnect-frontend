@@ -10,7 +10,7 @@ import { useAuth } from "@/context/AuthProvider";
 
 export default function CreateProjectPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth(); // ✅ Renamed to authLoading
+  const { user, loading: authLoading } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -19,14 +19,14 @@ export default function CreateProjectPage() {
     repoUrl: "",
     liveUrl: "",
   });
-  const [loading, setLoading] = useState(false); // ✅ This is for form submission
+  const [loading, setLoading] = useState(false); //  This is for form submission
   const [error, setError] = useState("");
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // ✅ Show loading or redirect if not authenticated
+  //  Show loading or redirect if not authenticated
   if (!mounted || authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

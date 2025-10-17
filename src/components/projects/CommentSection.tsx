@@ -92,7 +92,7 @@ export default function CommentSection({ projectId }: CommentSectionProps) {
     setComments((prev) => prev.filter((c) => c._id !== commentId));
   };
 
-  // ✅ Don't render until mounted
+  // Don't render until mounted
   if (!mounted || fetchLoading) {
     return (
       <div className="mt-10">
@@ -113,7 +113,7 @@ export default function CommentSection({ projectId }: CommentSectionProps) {
       <div className="space-y-3 mb-6">
         {comments.length > 0 ? (
           comments.map((c, index) => {
-            console.log(`🔍 Rendering comment ${index}:`, c);
+            console.log(` Rendering comment ${index}:`, c);
             return (
               <CommentItem
                 key={c._id || `comment-${index}`}
