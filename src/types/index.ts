@@ -107,3 +107,14 @@ export interface RequestOptions {
   headers?: Record<string, string>;
   body?: unknown;
 }
+export interface UserProfile {
+  _id?: string;
+  fullName?: string;
+  name?: string;
+  email: string;
+  techStack?: string;
+  github?: string;
+  linkedin?: string;
+  bio?: string;
+  avatar?: string; // optional profile photo URL
+}

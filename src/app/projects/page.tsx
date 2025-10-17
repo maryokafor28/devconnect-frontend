@@ -8,7 +8,7 @@ import ProjectCard from "@/components/widgets/ProjectCard";
 import CreateProjectButton from "@/components/widgets/ProjectButton";
 import { useAuth } from "@/context/AuthProvider";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -36,6 +36,13 @@ export default function ProjectsPage() {
       console.error("Logout failed:", err);
     }
   };
+  const handleViewProfile = () => {
+    if (user) {
+      router.push(`/profile/${user._id}`); // redirect to your profile
+    } else {
+      router.push("/login");
+    }
+  };
 
   return (
     <div className="min-h-screen text-white px-6 py-10">
@@ -49,14 +56,28 @@ export default function ProjectsPage() {
               </p>
             )}
           </div>
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            className="bg-red-600/20 hover:bg-red-600/30 border-red-500/50 text-white"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
+
+          <div className="flex gap-3">
+            {user && (
+              <Button
+                onClick={handleViewProfile}
+                variant="outline"
+                className="bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/50 text-white"
+              >
+                <UserIcon className="w-4 h-4 mr-2" />
+                View Profile
+              </Button>
+            )}
+
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="bg-red-600/20 hover:bg-red-600/30 border-red-500/50 text-white"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         <CreateProjectButton />
