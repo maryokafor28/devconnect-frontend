@@ -1,28 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import UserProfile from "@/components/profile/UserProfile";
 import { UserAPI } from "@/api/user";
 import { UserProfile as UserProfileType } from "@/types";
 
-export default function MyProfilePage() {
+export default function UserProfilePage() {
+  const params = useParams();
+  const userId = params.id as string;
+
   const [user, setUser] = useState<UserProfileType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMyProfile = async () => {
+    const fetchUserProfile = async () => {
       try {
-        const data = await UserAPI.getProfile();
+        const data = await UserAPI.getById(userId); // ✅ Use getById instead
         setUser(data);
       } catch (error) {
-        console.error("❌ Failed to fetch profile:", error);
+        console.error("❌ Failed to fetch user profile:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMyProfile();
-  }, []);
+    if (userId) {
+      fetchUserProfile();
+    }
+  }, [userId]);
 
   if (loading)
     return (
@@ -32,5 +38,5 @@ export default function MyProfilePage() {
   if (!user)
     return <p className="text-center mt-20 text-gray-400">User not found.</p>;
 
-  return <UserProfile user={user} editable={true} />;
+  return <UserProfile user={user} editable={false} />;
 }

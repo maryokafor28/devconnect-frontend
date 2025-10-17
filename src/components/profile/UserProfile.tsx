@@ -19,7 +19,7 @@ export default function UserProfile({
   editable = false,
 }: UserProfileProps) {
   const [form, setForm] = useState<UserProfile>(user);
-  const [isEditing, setIsEditing] = useState(editable);
+  const [isEditing, setIsEditing] = useState(false); // ✅ Always start in view mode
   const router = useRouter();
 
   const handleChange = (
@@ -30,13 +30,21 @@ export default function UserProfile({
     try {
       const updatedUser = await UserAPI.updateProfile(form);
       setForm(updatedUser);
-      console.log(" Profile updated:", updatedUser);
+      console.log("✅ Profile updated:", updatedUser);
     } catch (err) {
-      console.error(" Update failed:", err);
+      console.error("❌ Update failed:", err);
     } finally {
       setIsEditing(false);
     }
   };
+
+  const handleCancel = () => {
+    setForm(user); // ✅ Reset form to original data
+    setIsEditing(false);
+  };
+
+  // ✅ Fields are readonly if: not editable OR not currently editing
+  const isReadOnly = !editable || !isEditing;
 
   return (
     <div>
@@ -48,7 +56,7 @@ export default function UserProfile({
         ← Back
       </Button>
 
-      <div className="min-h-screen  text-white px-6 py-12 flex justify-center items-center">
+      <div className="min-h-screen text-white px-6 py-12 flex justify-center items-center">
         <div className="w-full max-w-2xl bg-white/10 backdrop-blur-md p-10 rounded-2xl border border-white/20 shadow-2xl space-y-8">
           {/* Header */}
           <div className="text-center border-b border-white/10 pb-6">
@@ -61,6 +69,7 @@ export default function UserProfile({
                 <a
                   href={form.github}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition"
                 >
                   <ExternalLink size={22} />
@@ -70,6 +79,7 @@ export default function UserProfile({
                 <a
                   href={form.linkedin}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition"
                 >
                   <ExternalLink size={22} />
@@ -81,13 +91,13 @@ export default function UserProfile({
           {/* Form Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="name">name</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                readOnly={!isEditing}
+                readOnly={isReadOnly}
                 className="bg-transparent border border-gray-500 text-white placeholder-gray-400 mt-4"
               />
             </div>
@@ -111,7 +121,7 @@ export default function UserProfile({
                 placeholder="Frontend, Backend..."
                 value={form.techStack || ""}
                 onChange={handleChange}
-                readOnly={!isEditing}
+                readOnly={isReadOnly}
                 className="bg-transparent border border-gray-500 text-white placeholder-gray-400 mt-4"
               />
             </div>
@@ -124,7 +134,7 @@ export default function UserProfile({
                 placeholder="https://github.com/username"
                 value={form.github || ""}
                 onChange={handleChange}
-                readOnly={!isEditing}
+                readOnly={isReadOnly}
                 className="bg-transparent border border-gray-500 text-white placeholder-gray-400 mt-4"
               />
             </div>
@@ -137,7 +147,7 @@ export default function UserProfile({
                 placeholder="https://linkedin.com/in/username"
                 value={form.linkedin || ""}
                 onChange={handleChange}
-                readOnly={!isEditing}
+                readOnly={isReadOnly}
                 className="bg-transparent border border-gray-500 text-white placeholder-gray-400 mt-4"
               />
             </div>
@@ -150,13 +160,13 @@ export default function UserProfile({
                 placeholder="Tell us about yourself..."
                 value={form.bio || ""}
                 onChange={handleChange}
-                readOnly={!isEditing}
+                readOnly={isReadOnly}
                 className="w-full rounded-lg bg-transparent border border-gray-500 text-white p-3 resize-none h-28 placeholder-gray-400 mt-4"
               />
             </div>
           </div>
 
-          {/* Buttons */}
+          {/* Buttons - Only show if profile is editable */}
           {editable && (
             <div className="pt-4 flex justify-center gap-6">
               {isEditing ? (
@@ -169,7 +179,7 @@ export default function UserProfile({
                   </Button>
                   <Button
                     variant="secondary"
-                    onClick={() => setIsEditing(false)}
+                    onClick={handleCancel}
                     className="bg-gray-600 hover:bg-gray-700 px-8 py-2"
                   >
                     Cancel
