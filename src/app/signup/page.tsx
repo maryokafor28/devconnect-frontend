@@ -48,7 +48,7 @@ export default function SignupPage() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-xl p-8 text-white">
         <h1 className="text-center text-3xl font-bold mb-6">Register</h1>
         <form onSubmit={handleSubmit} className="space-y-4">

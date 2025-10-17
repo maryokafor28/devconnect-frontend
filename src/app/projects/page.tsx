@@ -1,14 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Project } from "@/types";
 import { ProjectAPI } from "@/api/projects";
 import ProjectCard from "@/components/widgets/ProjectCard";
 import CreateProjectButton from "@/components/widgets/ProjectButton";
+import { useAuth } from "@/context/AuthProvider";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -22,12 +28,35 @@ export default function ProjectsPage() {
       }
     })();
   }, []);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/login");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-950 to-black text-white px-6 py-10">
+    <div className="min-h-screen text-white px-6 py-10">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Projects</h1>
+          <div>
+            <h1 className="text-3xl font-bold">Projects</h1>
+            {user && (
+              <p className="text-sm text-gray-400 mt-1">
+                Welcome back, {user.name}
+              </p>
+            )}
+          </div>
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="bg-red-600/20 hover:bg-red-600/30 border-red-500/50 text-white"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Logout
+          </Button>
         </div>
 
         <CreateProjectButton />
