@@ -1,36 +1,34 @@
 ---
 
-## 💻 **README for Frontend Repository (`devconnect-frontend`)**
 
 ```markdown
-# 💻 DevConnect Frontend
+#  DevConnect Frontend
 
 This is the **frontend** for DevConnect — a social platform for developers to showcase projects, comment, and collaborate.  
 Built using **Next.js (App Router)** and styled with **Tailwind CSS + ShadCN UI**.
 
 ---
 
-## 🌐 Live Site
+## Live Site
 
 🔗 **https://devconnect-frontend-azure.vercel.app**
 
 ---
 
-## 🧩 Tech Stack
+## Tech Stack
 
 - **Next.js (App Router)**
 - **TypeScript**
 - **Tailwind CSS + ShadCN UI**
-- **Framer Motion** (animations)
 - **React Context (AuthProvider)** for global auth state
 - **Fetch API** for backend integration
 - **Vercel** for deployment
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
-### 1️⃣ Clone the Repository
+### 1 Clone the Repository
 
 ```bash
 git https://github.com/maryokafor28/devconnect-frontend.git
