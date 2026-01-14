@@ -1,7 +1,6 @@
 ---
 
 
-```markdown
 #  DevConnect Frontend
 
 This is the **frontend** for DevConnect — a social platform for developers to showcase projects, comment, and collaborate.  
