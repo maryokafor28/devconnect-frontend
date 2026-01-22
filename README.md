@@ -29,16 +29,16 @@ Built using **Next.js (App Router)** and styled with **Tailwind CSS + ShadCN UI*
 
 ### 1 Clone the Repository
 
-```bash
+
 git https://github.com/maryokafor28/devconnect-frontend.git
 cd devconnect-frontend
 
 ##  install Dependenciee
-```
+
 
 npm install
 
-```
+
 ## create .env.loacl file
 NEXT_PUBLIC_API_BASE_URL=https://devconnect-backend-l07f.onrender.com
 
