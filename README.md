@@ -11,6 +11,10 @@ Built using **Next.js (App Router)** and styled with **Tailwind CSS + ShadCN UI*
 ## Live Site
 
 🔗 **https://devconnect-frontend-azure.vercel.app**
+---
+
+## Backend repo
+**https://devconnect-backend.git**
 
 ---
 
